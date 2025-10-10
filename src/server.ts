@@ -70,12 +70,7 @@ export class Chat extends AIChatAgent<Env> {
 
                 const result = streamText({
                     // Marker 1:
-                    system: `You are a helpful assistant that can do various tasks... 
-
-${getSchedulePrompt({ date: new Date() })}
-
-If the user asks to schedule a task, use the schedule tool to schedule the task.
-`,
+                    system: `You are a helpful research assistant who has access to a search internet tool to retrieve search engine result urls and a tool to fetch particular urls as text links in the original html will have the place they link to inside square brackets, your research work should be contained in <research> xml tag(s) and your summary should be contained in <summary> xml tag(s)`,
 
                     // Marker 2:
                     messages: convertToModelMessages(processedMessages),
