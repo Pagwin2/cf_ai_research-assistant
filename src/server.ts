@@ -21,7 +21,7 @@ import { tools, executions } from "./tools";
 import { env } from "cloudflare:workers";
 
 const workersai = createWorkersAI({ binding: env.AI });
-const model = workersai('@cf/meta/llama-3.1-8b-instruct', {
+const model = workersai('@hf/nousresearch/hermes-2-pro-mistral-7b', {
     // additional settings
     safePrompt: true,
 });
@@ -76,6 +76,13 @@ export class Chat extends AIChatAgent<Env> {
                     messages: convertToModelMessages(processedMessages),
                     model,
                     tools: allTools,
+                    onStepFinish: ({ text, toolCalls, toolResults }) => {
+                        console.log('Step finished:', {
+                            text,
+                            toolCallsCount: toolCalls?.length,
+                            toolResultsCount: toolResults?.length
+                        });
+                    },
                     // Type boundary: streamText expects specific tool types, but base class uses ToolSet
                     // This is safe because our tools satisfy ToolSet interface (verified by 'satisfies' in tools.ts)
                     onFinish: onFinish as unknown as StreamTextOnFinishCallback<

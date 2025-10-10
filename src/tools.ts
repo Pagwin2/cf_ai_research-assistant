@@ -22,6 +22,7 @@ const searchInternet = tool({
     // TODO: need to rate limit to 1/second due to the free tier restrictions
     // TODO: figure out how to store Brave search API key so cloudflare deployment and dev deoployment can see it
     execute: async ({ query }) => {
+        console.log(`Search: ${query}`)
         const { web: { results } }: BraveAPIResponse = await fetch(`https://api.search.brave.com/res/v1/web/search?${encodeURI(query)}`, {
             headers: {
                 Accept: "application/json",

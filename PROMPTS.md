@@ -28,3 +28,29 @@ Claude: https://claude.ai/share/0dd04143-6211-40f6-ade4-e6ddc0e82e56
 Reading over the initial response I went with Brave's API, it said Brave's API was cheaper and there was no particular reason to deal with Perplexity's additions for this project
 
 Claude's code had more type definitions than I needed and overall overengineered the code for what I'm doing with it.
+
+# Chat 3
+## Prompt(s)
+
+"I have some code which uses vercel's AI sdk ... However when the LLM tries to make multiple tool calls it seems to be interpreted as a chat message instead of multiple tool calls, any ideas on why?"
+
+"for 1, looking at the documentation I don't see a maxToolRoundTrips parameter https://ai-sdk.dev/docs/reference/ai-sdk-core/stream-text
+
+for 2, convertToModelMessages is also from the vercel AI sdk
+
+for the logging of an example though I got
+
+...
+
+I am using cloudflare's workers AI with llama 3.1-8b-instruct created via
+
+...
+"
+
+## Chat Link(s)
+
+Claude: https://claude.ai/share/626274bd-17d1-4c93-adef-3dc9559d0f8e
+
+## Use in Project
+
+Used to determine that Llama 3.1 provided by cloudflare was insuffiecient for my needs and so swapped to @hf/nousresearch/hermes-2-pro-mistral-7b
