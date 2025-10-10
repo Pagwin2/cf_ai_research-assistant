@@ -55,7 +55,7 @@ Claude: https://claude.ai/share/626274bd-17d1-4c93-adef-3dc9559d0f8e
 
 Used to determine that Llama 3.1 provided by cloudflare was insuffiecient for my needs and so swapped to @hf/nousresearch/hermes-2-pro-mistral-7b
 
-## Chat 4
+# Chat 4
 
 ## Prompt(s)
 
@@ -74,3 +74,42 @@ https://claude.ai/share/9d5aa8f6-4bca-461e-992d-1ded3b1d7dd9
 Immediately added await to relevant code and felt like an idiot after going back to the docs to see await in the example on the secrets documentation page
 
 Then when it continued not working I used it as a rubber ducky/way of realizing `wrangler tail` allows for viewing logs
+
+# Chat 5
+
+## Prompt(s)
+
+"I am using @hf/nousresearch/hermes-2-pro-mistral-7bfor something which calls tools, is this model somewhat unreliable with it's tool usage?"
+
+"I am getting the model from cloudflare's workers AI is there a better model from that?"
+
+"I'm using it through vercel's api sdk"
+
+"@cf/meta/llama-3.1-8b-instruct is also a bit flaky with tool usage, please search cloudflare's documentation to see what models are available and the general internet for what models among the ones you find are some of the better ones for tool usage"
+
+"considering how the problem has persisted between models with varying size and capability could something be wrong with this usage of vercel's AI sdk"
+
+"I've changed the system prompt but I don't see the maxSteps parameter that you're talking about https://ai-sdk.dev/docs/reference/ai-sdk-core/stream-text"
+
+"tool definitions:
+
+...
+
+onStepFinish output:
+
+...
+
+with the visible response being a call to the search internet tool and then sending 
+
+...
+
+in the chat
+"
+
+## Chat Link(s)
+
+https://claude.ai/share/0e2d19f1-302d-4db3-b389-b3d9df7ea0c2
+
+## Use in Project
+
+Used Claude to attempt to find a better LLM within cloudflare's Worker AI API that would not mess up attempted tool usage as well as seeing if I was missing some obvious issue with the code, concluded on going back to using ChatGPT for the LLM powering the research bot

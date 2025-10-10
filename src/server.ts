@@ -13,20 +13,20 @@ import {
     createUIMessageStreamResponse,
     type ToolSet
 } from "ai";
-//import { openai } from "@ai-sdk/openai";
-import { createWorkersAI } from 'workers-ai-provider';
+import { openai } from "@ai-sdk/openai";
+//import { createWorkersAI } from 'workers-ai-provider';
 
 import { processToolCalls, cleanupMessages } from "./utils";
 import { tools, executions } from "./tools";
 import { env } from "cloudflare:workers";
 
-const workersai = createWorkersAI({ binding: env.AI });
-const model = workersai('@hf/nousresearch/hermes-2-pro-mistral-7b', {
-    // additional settings
-    safePrompt: true,
-});
+//const workersai = createWorkersAI({ binding: env.AI });
+//const model = workersai('@cf/meta/llama-3.3-70b-instruct-fp8-fast', {
+//    // additional settings
+//    safePrompt: true,
+//});
 
-//const model = openai("gpt-4o-2024-11-20");
+const model = openai("gpt-4o-2024-11-20");
 // Cloudflare AI Gateway
 // const openai = createOpenAI({
 //   apiKey: env.OPENAI_API_KEY,
@@ -70,18 +70,27 @@ export class Chat extends AIChatAgent<Env> {
 
                 const result = streamText({
                     // Marker 1:
-                    system: `You are a helpful research assistant who has access to a search internet tool to retrieve search engine result urls and a tool to fetch particular urls as text links in the original html will have the place they link to inside square brackets, your research work should be contained in <research> xml tag(s) and your summary should be contained in <summary> xml tag(s)`,
+                    system: `You are a helpful research assistant with access to:
+- search_internet: Search the web for information
+- fetch_url: Retrieve content from specific URLs
+
+When asked to research something:
+1. Use search_internet to find relevant sources
+2. Use fetch_url to read detailed content from promising URLs
+3. After gathering information, provide a comprehensive summary
+
+Important: HTML links will show their destination in [square brackets].`,
 
                     // Marker 2:
                     messages: convertToModelMessages(processedMessages),
                     model,
                     tools: allTools,
-                    onStepFinish: ({ text, toolCalls, toolResults }) => {
-                        console.log('Step finished:', {
-                            text,
-                            toolCallsCount: toolCalls?.length,
-                            toolResultsCount: toolResults?.length
-                        });
+                    onStepFinish: ({ text, finishReason }) => {
+                        console.log('=== STEP DEBUG ===');
+                        console.log('Text output:', text);
+                        console.log('Finish reason:', finishReason);
+
+                        console.log('==================');
                     },
                     // Type boundary: streamText expects specific tool types, but base class uses ToolSet
                     // This is safe because our tools satisfy ToolSet interface (verified by 'satisfies' in tools.ts)

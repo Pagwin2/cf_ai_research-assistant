@@ -9,7 +9,7 @@ import type { Chat } from "./server";
 import { getCurrentAgent } from "agents";
 import { scheduleSchema } from "agents/schedule";
 import { env } from "cloudflare:workers";
-import { assert } from "node:console";
+//import { assert } from "node:console";
 
 type BraveAPIResponse = { web: { results: { url: string }[] } };
 
@@ -23,18 +23,18 @@ const searchInternet = tool({
     // TODO: need to rate limit to 1/second due to the free tier restrictions
     // TODO: figure out how to store Brave search API key so cloudflare deployment and dev deoployment can see it
     execute: async ({ query }) => {
-        console.log(`Search: ${query}`);
+        //console.log(`Search: ${query}`);
         const eventual_response = await fetch(`https://api.search.brave.com/res/v1/web/search?q=${encodeURIComponent(query)}`, {
             headers: {
                 Accept: "application/json",
                 "X-Subscription-Token": await env.BRAVE_API_KEY.get()
             }
         });
-        console.log("2");
+        //console.log("2");
         const body = await eventual_response.json();
-        console.log(body);
+        //console.log(body);
         const { web: { results } }: BraveAPIResponse = body as BraveAPIResponse;
-        console.log(`RESULTS: ${results}`);
+        //console.log(`RESULTS: ${results}`);
         return results.map(result => result.url);
 
     }
@@ -44,13 +44,15 @@ const fetchPage = tool({
     description: "Retrieve a web page from a given URL as plain text",
     inputSchema: z.object({ url: z.string() }),
     execute: async ({ url }) => {
-        console.log(`URL:${url}`)
-        const resp = await fetch(url);
-        console.log("done");
+        //console.log(`URL:${url}`)
+        const resp = await fetch(url, {
+            headers: { "User-Agent": "Unnamed-Research-Assistant-by-Pagwin/dev" }
+        });
+        //console.log("done");
         const body = await resp.text();
-        console.log(`HTML: ${body}`)
+        //console.log(`HTML: ${body}`)
         const txt = htmlToText(body, { preserveLinks: true });
-        console.log(`HTML: ${txt}`)
+        //console.log(`HTML: ${txt}`)
         return txt;
     }
 })
