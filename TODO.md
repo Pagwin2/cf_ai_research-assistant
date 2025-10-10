@@ -1,6 +1,6 @@
 # TODO
 
-- [x] implement the searchInternet tool in tools.ts
+- [/] implement the searchInternet tool in tools.ts
 - [ ] Change the ai prompt/response to have it do searching and summarize that searching based on user prompt instead of being chat
     - [x] at Marker 1 in server.ts change the system prompt so the LLM responds with an xml esque language containing "research" with calls to the tool(s) and a "summary section" afterwards for the UI to highlight
     - [ ] at Marker 2 change "messages" so the llm behaves accordingly

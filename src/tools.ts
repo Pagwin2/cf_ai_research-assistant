@@ -8,6 +8,7 @@ import { z } from "zod/v3";
 import type { Chat } from "./server";
 import { getCurrentAgent } from "agents";
 import { scheduleSchema } from "agents/schedule";
+import { env } from "cloudflare:workers";
 import { assert } from "node:console";
 
 type BraveAPIResponse = { web: { results: { url: string }[] } };
@@ -22,14 +23,18 @@ const searchInternet = tool({
     // TODO: need to rate limit to 1/second due to the free tier restrictions
     // TODO: figure out how to store Brave search API key so cloudflare deployment and dev deoployment can see it
     execute: async ({ query }) => {
-        console.log(`Search: ${query}`)
-        const { web: { results } }: BraveAPIResponse = await fetch(`https://api.search.brave.com/res/v1/web/search?${encodeURI(query)}`, {
+        console.log(`Search: ${query}`);
+        const eventual_response = await fetch(`https://api.search.brave.com/res/v1/web/search?q=${encodeURIComponent(query)}`, {
             headers: {
                 Accept: "application/json",
-                "X-Subscription-Token": todo("Store/retrieve Brave search api token")
+                "X-Subscription-Token": await env.BRAVE_API_KEY.get()
             }
-        })
-            .then(r => r.json());
+        });
+        console.log("2");
+        const body = await eventual_response.json();
+        console.log(body);
+        const { web: { results } }: BraveAPIResponse = body as BraveAPIResponse;
+        console.log(`RESULTS: ${results}`);
         return results.map(result => result.url);
 
     }
@@ -39,8 +44,14 @@ const fetchPage = tool({
     description: "Retrieve a web page from a given URL as plain text",
     inputSchema: z.object({ url: z.string() }),
     execute: async ({ url }) => {
-        const resp = await fetch(url).then(r => r.text());
-        return htmlToText(resp, { preserveLinks: true });
+        console.log(`URL:${url}`)
+        const resp = await fetch(url);
+        console.log("done");
+        const body = await resp.text();
+        console.log(`HTML: ${body}`)
+        const txt = htmlToText(body, { preserveLinks: true });
+        console.log(`HTML: ${txt}`)
+        return txt;
     }
 })
 
@@ -52,6 +63,8 @@ export const tools = {
     searchInternet,
     fetchPage
 } satisfies ToolSet;
+
+export const executions = {}
 
 function todo(msg: string = ""): any {
     throw `TODO: ${msg}`;

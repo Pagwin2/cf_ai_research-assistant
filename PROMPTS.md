@@ -54,3 +54,23 @@ Claude: https://claude.ai/share/626274bd-17d1-4c93-adef-3dc9559d0f8e
 ## Use in Project
 
 Used to determine that Llama 3.1 provided by cloudflare was insuffiecient for my needs and so swapped to @hf/nousresearch/hermes-2-pro-mistral-7b
+
+## Chat 4
+
+## Prompt(s)
+
+"I'm trying to use cloudflare secrets store for something, here's my wrangler.jsonc ... here's where I use it in the code ... assuming secret_name is correct, why does this fail when deployed to cloudflare?"
+
+"it still seems to not work, here is the whole function for the code after the change"
+
+"the string being passed into encodeURI is "unicorns" to be clear, is it possible to view console log statments made in cloudflare workers?"
+
+## Chat Link(s)
+
+https://claude.ai/share/9d5aa8f6-4bca-461e-992d-1ded3b1d7dd9
+
+## Use in Project
+
+Immediately added await to relevant code and felt like an idiot after going back to the docs to see await in the example on the secrets documentation page
+
+Then when it continued not working I used it as a rubber ducky/way of realizing `wrangler tail` allows for viewing logs

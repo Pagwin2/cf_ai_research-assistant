@@ -25,6 +25,13 @@
 			}
 		]
 	},
+        "secrets_store_secrets":[
+            {
+                "binding": "BRAVE_API_KEY", 
+                "store_id":"6500cc5028b840ebb9814ceb82a3fd91", 
+                "secret_name":"BRAVE_SEARCH_API_KEY"
+            }
+        ],
 	"migrations": [
 		{
 			"tag": "v1",
