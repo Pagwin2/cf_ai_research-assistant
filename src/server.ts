@@ -1,7 +1,7 @@
 import { routeAgentRequest, type Schedule } from "agents";
 
 import { getSchedulePrompt } from "agents/schedule";
-
+import { createOpenAI } from "@ai-sdk/openai";
 import { AIChatAgent } from "agents/ai-chat-agent";
 import {
     generateId,
@@ -13,7 +13,6 @@ import {
     createUIMessageStreamResponse,
     type ToolSet
 } from "ai";
-import { openai } from "@ai-sdk/openai";
 //import { createWorkersAI } from 'workers-ai-provider';
 
 import { processToolCalls, cleanupMessages } from "./utils";
@@ -26,7 +25,7 @@ import { env } from "cloudflare:workers";
 //    safePrompt: true,
 //});
 
-const model = openai("gpt-4o-2024-11-20");
+
 // Cloudflare AI Gateway
 // const openai = createOpenAI({
 //   apiKey: env.OPENAI_API_KEY,
@@ -44,6 +43,8 @@ export class Chat extends AIChatAgent<Env> {
         onFinish: StreamTextOnFinishCallback<ToolSet>,
         _options?: { abortSignal?: AbortSignal }
     ) {
+        const openai = createOpenAI({ apiKey: await env.OPENAI_API_KEY.get() });
+        const model = openai("gpt-4o-2024-11-20");
         // const mcpConnection = await this.mcp.connect(
         //   "https://path-to-mcp-server/sse"
         // );
@@ -53,7 +54,9 @@ export class Chat extends AIChatAgent<Env> {
             ...tools,
             ...this.mcp.getAITools()
         };
-
+        if (!model) {
+            console.error("fuck");
+        }
         const stream = createUIMessageStream({
             execute: async ({ writer }) => {
                 // Clean up incomplete tool calls to prevent API errors
@@ -71,15 +74,15 @@ export class Chat extends AIChatAgent<Env> {
                 const result = streamText({
                     // Marker 1:
                     system: `You are a helpful research assistant with access to:
-- search_internet: Search the web for information
-- fetch_url: Retrieve content from specific URLs
+- searchInternet: Search the web for information
+- fetchUrl: Retrieve content from specific URLs
 
 When asked to research something:
-1. Use search_internet to find relevant sources
-2. Use fetch_url to read detailed content from promising URLs
-3. After gathering information, provide a comprehensive summary
+1. Use searchInternet to find relevant sources
+2. Use fetchUrl to read detailed content from promising URLs
+3. Summarize results linking to relevant sources as the facts retrieved from them come up
 
-Important: HTML links will show their destination in [square brackets].`,
+Important: HTML links from content retrived via fetchUrl will show their destination in [square brackets].`,
 
                     // Marker 2:
                     messages: convertToModelMessages(processedMessages),
