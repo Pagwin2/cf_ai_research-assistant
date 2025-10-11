@@ -13,3 +13,4 @@
         - [ ] Change descriptive text around text input at Marker 3 in app.tsx
         - [ ] replace the function used in the map at marker 4 with one which does a switch statement on `m.role` or whatever it gets renamed to to change how things are displayed rather than doing a billion checks
             - https://ai-sdk.dev/docs/reference/ai-sdk-core/ui-message
+- [ ] add code to either rate limit this to OpenAI or pass on the fact that a rate limit was hit to the user

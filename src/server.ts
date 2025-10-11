@@ -78,8 +78,8 @@ export class Chat extends AIChatAgent<Env> {
 When asked to research something:
 1. Use searchInternet to find relevant sources
 2. Use fetchUrl to read detailed content from promising URLs
-3. Write an in depth report within <report> xml tag(s)
-4. write a summary within <summary> xml tag(s)
+3. Write an in depth report within <report> xml tag(s), you may use markdown here
+4. write a summary within <summary> xml tag(s) you may NOT use markdown here
 
 Note: Everthing you write should be contained within report and summary xml tag(s)
 Important: HTML links from content retrived via fetchUrl will show their destination in [square brackets].`,

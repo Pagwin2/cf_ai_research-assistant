@@ -14,6 +14,8 @@ import { Toggle } from "@/components/toggle/Toggle";
 import { Textarea } from "@/components/textarea/Textarea";
 import { MemoizedMarkdown } from "@/components/memoized-markdown";
 import { ToolInvocationCard } from "@/components/tool-invocation-card/ToolInvocationCard";
+import { UserMessage } from "@/components/messages/UserMessage";
+import { BotMessage } from "@/components/messages/BotMessage";
 
 // Icon imports
 import {
@@ -29,7 +31,6 @@ import {
 // List of tools that require human confirmation
 // NOTE: this should match the tools that don't have execute functions in tools.ts
 const toolsRequiringConfirmation: (keyof typeof tools)[] = [
-    "getWeatherInformation"
 ];
 
 export default function Chat() {
@@ -113,7 +114,6 @@ export default function Chat() {
     } = useAgentChat<unknown, UIMessage<{ createdAt: string }>>({
         agent
     });
-
     // Scroll to bottom when messages change
     useEffect(() => {
         agentMessages.length > 0 && scrollToBottom();
@@ -201,19 +201,18 @@ export default function Chat() {
                                     <div className="bg-[#F48120]/10 text-[#F48120] rounded-full p-3 inline-flex">
                                         <Robot size={24} />
                                     </div>
-                                    <h3 className="font-semibold text-lg">Welcome to AI Chat</h3>
+                                    <h3 className="font-semibold text-lg">Welcome to AI Research Assistant</h3>
                                     <p className="text-muted-foreground text-sm">
-                                        Start a conversation with your AI assistant. Try asking
-                                        about:
+                                        Ask your AI research assistant a question like
                                     </p>
                                     <ul className="text-sm text-left space-y-2">
                                         <li className="flex items-center gap-2">
                                             <span className="text-[#F48120]">•</span>
-                                            <span>Weather information for any city</span>
+                                            <span>Where did the idea that unicorns have pink manes come from?</span>
                                         </li>
                                         <li className="flex items-center gap-2">
                                             <span className="text-[#F48120]">•</span>
-                                            <span>Local time in different locations</span>
+                                            <span>Where was the idea of using LLMs to assist in research first proposed?</span>
                                         </li>
                                     </ul>
                                 </div>
@@ -222,118 +221,14 @@ export default function Chat() {
                     )}
                     {/* Marker 4: */}
                     {agentMessages.map((m, index) => {
-                        const isUser = m.role === "user";
                         const showAvatar =
                             index === 0 || agentMessages[index - 1]?.role !== m.role;
-
-                        return (
-                            <chat-msg key={m.id}>
-                                {showDebug && (
-                                    <pre className="text-xs text-muted-foreground overflow-scroll">
-                                        {JSON.stringify(m, null, 2)}
-                                    </pre>
-                                )}
-                                <div
-                                    className={`flex ${isUser ? "justify-end" : "justify-start"}`}
-                                >
-                                    <div
-                                        className={`flex gap-2 max-w-[85%] ${isUser ? "flex-row-reverse" : "flex-row"
-                                            }`}
-                                    >
-                                        {showAvatar && !isUser ? (
-                                            <Avatar username={"AI"} />
-                                        ) : (
-                                            !isUser && <div className="w-8" />
-                                        )}
-
-                                        <div>
-                                            <div>
-                                                {m.parts?.map((part, i) => {
-                                                    if (part.type === "text") {
-                                                        return (
-                                                            // biome-ignore lint/suspicious/noArrayIndexKey: immutable index
-                                                            <div key={i}>
-                                                                <Card
-                                                                    className={`p-3 rounded-md bg-neutral-100 dark:bg-neutral-900 ${isUser
-                                                                        ? "rounded-br-none"
-                                                                        : "rounded-bl-none border-assistant-border"
-                                                                        } ${part.text.startsWith("scheduled message")
-                                                                            ? "border-accent/50"
-                                                                            : ""
-                                                                        } relative`}
-                                                                >
-                                                                    {part.text.startsWith(
-                                                                        "scheduled message"
-                                                                    ) && (
-                                                                            <span className="absolute -top-3 -left-2 text-base">
-                                                                                🕒
-                                                                            </span>
-                                                                        )}
-                                                                    <MemoizedMarkdown
-                                                                        id={`${m.id}-${i}`}
-                                                                        content={part.text.replace(
-                                                                            /^scheduled message: /,
-                                                                            ""
-                                                                        )}
-                                                                    />
-                                                                </Card>
-                                                                <p
-                                                                    className={`text-xs text-muted-foreground mt-1 ${isUser ? "text-right" : "text-left"
-                                                                        }`}
-                                                                >
-                                                                    {formatTime(
-                                                                        m.metadata?.createdAt
-                                                                            ? new Date(m.metadata.createdAt)
-                                                                            : new Date()
-                                                                    )}
-                                                                </p>
-                                                            </div>
-                                                        );
-                                                    }
-
-                                                    if (isToolUIPart(part)) {
-                                                        const toolCallId = part.toolCallId;
-                                                        const toolName = part.type.replace("tool-", "");
-                                                        const needsConfirmation =
-                                                            toolsRequiringConfirmation.includes(
-                                                                toolName as keyof typeof tools
-                                                            );
-
-                                                        // Skip rendering the card in debug mode
-                                                        if (showDebug) return null;
-
-                                                        return (
-                                                            <ToolInvocationCard
-                                                                // biome-ignore lint/suspicious/noArrayIndexKey: using index is safe here as the array is static
-                                                                key={`${toolCallId}-${i}`}
-                                                                toolUIPart={part}
-                                                                toolCallId={toolCallId}
-                                                                needsConfirmation={needsConfirmation}
-                                                                onSubmit={({ toolCallId, result }) => {
-                                                                    addToolResult({
-                                                                        tool: part.type.replace("tool-", ""),
-                                                                        toolCallId,
-                                                                        output: result
-                                                                    });
-                                                                }}
-                                                                addToolResult={(toolCallId, result) => {
-                                                                    addToolResult({
-                                                                        tool: part.type.replace("tool-", ""),
-                                                                        toolCallId,
-                                                                        output: result
-                                                                    });
-                                                                }}
-                                                            />
-                                                        );
-                                                    }
-                                                    return null;
-                                                })}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </chat-msg>
-                        );
+                        if (m.role === "user") {
+                            return <UserMessage key={m.id} msg={m} showAvatar={showAvatar} />
+                        }
+                        else {
+                            return <BotMessage key={m.id} msg={m} showAvatar={showAvatar} />
+                        }
                     })}
                     <div ref={messagesEndRef} />
                 </div>
