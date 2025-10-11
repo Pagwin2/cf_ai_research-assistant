@@ -44,7 +44,7 @@ export class Chat extends AIChatAgent<Env> {
         _options?: { abortSignal?: AbortSignal }
     ) {
         const openai = createOpenAI({ apiKey: await env.OPENAI_API_KEY.get() });
-        const model = openai("gpt-4o-2024-11-20");
+        const model = openai("gpt-4.1-mini");//openai("gpt-4o-2024-11-20");
         // const mcpConnection = await this.mcp.connect(
         //   "https://path-to-mcp-server/sse"
         // );
@@ -73,15 +73,15 @@ export class Chat extends AIChatAgent<Env> {
 
                 const result = streamText({
                     // Marker 1:
-                    system: `You are a helpful research assistant with access to:
-- searchInternet: Search the web for information
-- fetchUrl: Retrieve content from specific URLs
+                    system: `You are a helpful research assistant:
 
 When asked to research something:
 1. Use searchInternet to find relevant sources
 2. Use fetchUrl to read detailed content from promising URLs
-3. Summarize results linking to relevant sources as the facts retrieved from them come up
+3. Write an in depth report within <report> xml tag(s)
+4. write a summary within <summary> xml tag(s)
 
+Note: Everthing you write should be contained within report and summary xml tag(s)
 Important: HTML links from content retrived via fetchUrl will show their destination in [square brackets].`,
 
                     // Marker 2:

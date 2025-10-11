@@ -113,3 +113,40 @@ https://claude.ai/share/0e2d19f1-302d-4db3-b389-b3d9df7ea0c2
 ## Use in Project
 
 Used Claude to attempt to find a better LLM within cloudflare's Worker AI API that would not mess up attempted tool usage as well as seeing if I was missing some obvious issue with the code, concluded on going back to using ChatGPT for the LLM powering the research bot
+
+# Chat 6
+
+## Prompt(s)
+
+"I am using OpenAI's api to make a research assistant via Vercel's AI sdk however I am hitting OpenAI's api rate limiting due to low spending/lack of account age, does Vercel's AI sdk have functionality to rate limit things for me and if not are there any other effective ways to deal with this?"
+
+"I am running this on Cloudflare, do they provide something timilar to vercel?"
+
+"I don't need to rate limit clients to my app though, I need to rate limit the app to OpenAI due to 1 query immediately bumping up on the Tier 1 rate limit"
+
+## Chat Link(s)
+
+Claude: https://claude.ai/share/bc80c458-7333-453d-bed6-bb877a7daf81
+
+## Use in Project
+
+None I just swapped in a model with a higher rate limit
+
+# Chat 7
+
+## Prompt(s)
+
+"I have a system prompt for a research assistant which uses GPT-4.1-mini under the hood
+
+...
+
+
+but I'm not always getting back content within summary tag(s), any ideas on what I could do to fix that?"
+
+## Chat Link(s)
+
+https://claude.ai/share/dee73977-bd8d-442a-9d03-25f3aa420edc
+
+## Use in Project
+
+removed "either" and replaced "or" with "and" in system prompt
