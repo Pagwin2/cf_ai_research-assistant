@@ -55,6 +55,8 @@ Claude: https://claude.ai/share/626274bd-17d1-4c93-adef-3dc9559d0f8e
 
 Used to determine that Llama 3.1 provided by cloudflare was insuffiecient for my needs and so swapped to @hf/nousresearch/hermes-2-pro-mistral-7b
 
+Incidentally also lead to changing system prompt
+
 # Chat 4
 
 ## Prompt(s)
