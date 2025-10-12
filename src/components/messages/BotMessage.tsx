@@ -7,6 +7,7 @@ import { MemoizedMarkdown } from "../memoized-markdown";
 import { formatTime } from "@/utils";
 import { useAgentChat } from "agents/ai-react";
 import { useAgent } from "agents/react";
+import { todo } from "node:test";
 
 export function BotMessage({ msg, showAvatar }: { msg: UIMessage, showAvatar: boolean }) {
     const isUser = false;
@@ -22,20 +23,22 @@ export function BotMessage({ msg, showAvatar }: { msg: UIMessage, showAvatar: bo
         agent
     });
 
+    const textResponse = msg.parts
+        ?.filter(p => p.type === "text")
+        .map(p => p.text).join("");
+    // Marker 5
+    const report = todo("parse out report xml tag(s)");
+    const summary = todo("parse out summary xml tags");
+
     return (
         <chat-msg>
             <div
-                className={`flex ${isUser ? "justify-end" : "justify-start"}`}
+                className={`flex justify-start`}
             >
                 <div
-                    className={`flex gap-2 max-w-[85%] ${isUser ? "flex-row-reverse" : "flex-row"
-                        }`}
+                    className={`flex gap-2 max-w-[85%] flex-row`}
                 >
-                    {showAvatar && !isUser ? (
-                        <Avatar username={"AI"} />
-                    ) : (
-                        !isUser && <div className="w-8" />
-                    )}
+                    <Avatar username={"AI"} />
 
                     <div>
                         <div>
