@@ -15,3 +15,5 @@
             - https://ai-sdk.dev/docs/reference/ai-sdk-core/ui-message
         - [ ] parse bot response into report and summary sections in BotMessage component at marker 5
 - [ ] add code to either rate limit this to OpenAI or pass on the fact that a rate limit was hit to the user
+- [ ] Write up a readme for this
+    - [ ] add cloudflare dev link thing to README
