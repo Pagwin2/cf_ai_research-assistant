@@ -131,10 +131,6 @@ export default function Chat() {
         )
     );
 
-    const formatTime = (date: Date) => {
-        return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-    };
-
     return (
         <div className="h-[100vh] w-full p-4 flex justify-center items-center bg-fixed overflow-hidden">
             <HasOpenAIKey />

@@ -8,7 +8,6 @@ import type {
 } from "ai";
 import { convertToModelMessages, isToolUIPart } from "ai";
 import { APPROVAL } from "./shared";
-import { env } from "cloudflare:workers";
 
 function isValidToolName<K extends PropertyKey, T extends object>(
     key: K,
@@ -121,4 +120,8 @@ export function cleanupMessages(messages: UIMessage[]): UIMessage[] {
         return !hasIncompleteToolCall;
     });
 }
+
+export const formatTime = (date: Date) => {
+    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+};
 

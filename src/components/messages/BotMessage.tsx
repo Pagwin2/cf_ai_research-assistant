@@ -1,11 +1,26 @@
-
+import { isToolUIPart } from "ai";
 import { type UIMessage } from "ai";
 import { Avatar } from "../avatar/Avatar";
 import { Card } from "../card/Card";
 import { ToolInvocationCard } from "../tool-invocation-card/ToolInvocationCard";
+import { MemoizedMarkdown } from "../memoized-markdown";
+import { formatTime } from "@/utils";
+import { useAgentChat } from "agents/ai-react";
+import { useAgent } from "agents/react";
 
 export function BotMessage({ msg, showAvatar }: { msg: UIMessage, showAvatar: boolean }) {
     const isUser = false;
+    const agent = useAgent({ agent: "chat" })
+    const {
+        messages: agentMessages,
+        addToolResult,
+        clearHistory,
+        status,
+        sendMessage,
+        stop
+    } = useAgentChat<unknown, UIMessage<{ createdAt: string }>>({
+        agent
+    });
 
     return (
         <chat-msg>
@@ -46,7 +61,7 @@ export function BotMessage({ msg, showAvatar }: { msg: UIMessage, showAvatar: bo
                                                         </span>
                                                     )}
                                                 <MemoizedMarkdown
-                                                    id={`${m.id}-${i}`}
+                                                    id={`${msg.id}-${i}`}
                                                     content={part.text.replace(
                                                         /^scheduled message: /,
                                                         ""
@@ -58,7 +73,7 @@ export function BotMessage({ msg, showAvatar }: { msg: UIMessage, showAvatar: bo
                                                     }`}
                                             >
                                                 {formatTime(
-                                                    m.metadata?.createdAt
+                                                    msg.metadata?.createdAt
                                                         ? new Date(m.metadata.createdAt)
                                                         : new Date()
                                                 )}
@@ -70,13 +85,6 @@ export function BotMessage({ msg, showAvatar }: { msg: UIMessage, showAvatar: bo
                                 if (isToolUIPart(part)) {
                                     const toolCallId = part.toolCallId;
                                     const toolName = part.type.replace("tool-", "");
-                                    const needsConfirmation =
-                                        toolsRequiringConfirmation.includes(
-                                            toolName as keyof typeof tools
-                                        );
-
-                                    // Skip rendering the card in debug mode
-                                    if (showDebug) return null;
 
                                     return (
                                         <ToolInvocationCard
@@ -84,7 +92,7 @@ export function BotMessage({ msg, showAvatar }: { msg: UIMessage, showAvatar: bo
                                             key={`${toolCallId}-${i}`}
                                             toolUIPart={part}
                                             toolCallId={toolCallId}
-                                            needsConfirmation={needsConfirmation}
+                                            needsConfirmation={false}
                                             onSubmit={({ toolCallId, result }) => {
                                                 addToolResult({
                                                     tool: part.type.replace("tool-", ""),
