@@ -89,9 +89,9 @@ export function BotMessage({ msg, showAvatar }: { msg: UIMessage, showAvatar: bo
                     className={`flex gap-2 max-w-[85%] flex-column`}
                 >
                     <Avatar username={"AI"} />
-                    {toolUseInfo.length != 0 ? <details className="tool-use p-3 bot-msg w-full text-neutral-100 text-base"><summary>Tool Usage</summary> {toolUseInfo} </details> : null}
-                    {report !== "" ? <details className="report p-3 bot-msg w-full text-neutral-100 text-base"><summary>Full Report</summary><MemoizedMarkdown content={report} id={msg.id} /></details> : null}
-                    {summary !== "" ? <section className="summary p-3 bot-msg w-full text-neutral-100 text-base"><h3 className="summary-header">Summary</h3>{summary}</section> : null}
+                    {toolUseInfo.length != 0 ? <details className="tool-use p-3 bot-msg w-full dark:text-neutral-100 text-neutral-900 dark:bg-neutral-900 text-base"><summary>Tool Usage</summary> {toolUseInfo} </details> : null}
+                    {report !== "" ? <details className="report p-3 bot-msg w-full dark:text-neutral-100 text-neutral-900 dark:bg-neutral-900 text-base"><summary>Full Report</summary><MemoizedMarkdown content={report} id={msg.id} /></details> : null}
+                    {summary !== "" ? <section className="summary p-3 bot-msg w-full dark:text-neutral-100 text-neutral-900 text-base"><h3 className="summary-header">Summary</h3>{summary}</section> : null}
 
                 </div>
             </div>

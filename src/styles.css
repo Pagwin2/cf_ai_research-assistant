@@ -314,20 +314,19 @@
 
 :root.dark {
     --report-bg-color:oklch(0.205 0.0631 145.55);
-    --report-details-bg-color:oklch(0.270 0.0973 145.55);
+    --report-details-bg-color:oklch(0.27 0.0832 145.55);
     --summary-bg-color: oklch(0.205 0.0631 253.06);
     --summary-header-underline-color: oklch(0.5779 0.1784 253.06);
     --tool-use-bg-color:oklch(0.205 0.0631 24.3);
     --tool-invocation-bg-color:#000;
 }
-/*TODO: Change out light mode colors*/
 :root.light {
-    --report-bg-color:oklch(0.205 0.0631 145.55);
-    --report-details-bg-color:oklch(0.270 0.0973 145.55);
-    --summary-bg-color: oklch(0.205 0.0631 253.06);
-    --summary-header-underline-color: oklch(0.5779 0.1784 253.06);
-    --tool-use-bg-color:oklch(0.205 0.0631 24.3);
-    --tool-invocation-bg-color:#000;
+    --report-bg-color:oklch(0.5324 0.1647 145.55);
+    --report-details-bg-color:oklch(0.6283 0.1639 145.55);
+    --summary-bg-color: oklch(0.5401 0.1664 253.06);
+    --summary-header-underline-color: oklch(0.4065 0.2802 264.39);
+    --tool-use-bg-color:oklch(0.5059 0.2045 24.3);
+    --tool-invocation-bg-color:#fff;
 }
 /*TODO: I'm never coming back to this but if I did I'd add css animations to these popping into existence*/
 .report {

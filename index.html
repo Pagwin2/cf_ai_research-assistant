@@ -45,25 +45,6 @@
 
 <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <style>
-        .light-warning {
-            color: red;
-            font-size: 1.5rem;
-            display: none;
-        }
-
-        :root.light .light-warning {
-            display: block;
-        }
-
-        @media (prefers-color-scheme: light) {
-            :root:not(.dark) .light-warning {
-                display: block;
-            }
-        }
-    </style>
-    <div class="light-warning">Some elements of this site are colored badly for light theming for the best experience
-        dark mode is advised</div>
     <div id="app"></div>
     <script type="module" src="/src/client.tsx"></script>
 </body>
