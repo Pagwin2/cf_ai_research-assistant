@@ -311,76 +311,75 @@
   }
 }
 
-
 :root.dark {
-    --report-bg-color:oklch(0.205 0.0631 145.55);
-    --report-details-bg-color:oklch(0.27 0.0832 145.55);
-    --summary-bg-color: oklch(0.205 0.0631 253.06);
-    --summary-header-underline-color: oklch(0.5779 0.1784 253.06);
-    --tool-use-bg-color:oklch(0.205 0.0631 24.3);
-    --tool-invocation-bg-color:#000;
+  --report-bg-color: oklch(0.205 0.0631 145.55);
+  --report-details-bg-color: oklch(0.27 0.0832 145.55);
+  --summary-bg-color: oklch(0.205 0.0631 253.06);
+  --summary-header-underline-color: oklch(0.5779 0.1784 253.06);
+  --tool-use-bg-color: oklch(0.205 0.0631 24.3);
+  --tool-invocation-bg-color: #000;
 }
 :root.light {
-    --report-bg-color:oklch(0.5324 0.1647 145.55);
-    --report-details-bg-color:oklch(0.6283 0.1639 145.55);
-    --summary-bg-color: oklch(0.5401 0.1664 253.06);
-    --summary-header-underline-color: oklch(0.4065 0.2802 264.39);
-    --tool-use-bg-color:oklch(0.5059 0.2045 24.3);
-    --tool-invocation-bg-color:#fff;
+  --report-bg-color: oklch(0.5324 0.1647 145.55);
+  --report-details-bg-color: oklch(0.6283 0.1639 145.55);
+  --summary-bg-color: oklch(0.5401 0.1664 253.06);
+  --summary-header-underline-color: oklch(0.4065 0.2802 264.39);
+  --tool-use-bg-color: oklch(0.5059 0.2045 24.3);
+  --tool-invocation-bg-color: #fff;
 }
 /*TODO: I'm never coming back to this but if I did I'd add css animations to these popping into existence*/
 .report {
-   background-color: var(--report-bg-color);
+  background-color: var(--report-bg-color);
 
-   &::details-content {
+  &::details-content {
     background-color: var(--report-details-bg-color);
     padding: 1em;
-   }
+  }
 
-   /*Credit to https://stackoverflow.com/a/79142029*/
+  /*Credit to https://stackoverflow.com/a/79142029*/
 
   interpolate-size: allow-keywords;
-  
+
   &::details-content {
     transition:
       block-size 0.5s,
       content-visibility 0.5s allow-discrete;
     overflow: hidden;
-    block-size: 0;     /* Or also:  height:0; */
+    block-size: 0; /* Or also:  height:0; */
   }
-  
+
   &[open]::details-content {
-    block-size: auto;  /* Or also:  height:auto; */
+    block-size: auto; /* Or also:  height:auto; */
   }
 }
 .summary {
-   background-color: var(--summary-bg-color);
+  background-color: var(--summary-bg-color);
 }
 .summary-header {
-    font-size:1rem;
-    font-weight: bold;
-    text-decoration: underline dashed var(--summary-header-underline-color);
+  font-size: 1rem;
+  font-weight: bold;
+  text-decoration: underline dashed var(--summary-header-underline-color);
 }
 .bot-msg {
-    border-radius: 0 0 var(--radius-md) var(--radius-md);
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
 }
 .flex-column {
-    flex-direction: column;
+  flex-direction: column;
 }
-.tool-use{
-  background-color:var(--tool-use-bg-color);
+.tool-use {
+  background-color: var(--tool-use-bg-color);
   &::details-content {
     transition:
       block-size 0.5s,
       content-visibility 0.5s allow-discrete;
     overflow: hidden;
-    block-size: 0;     /* Or also:  height:0; */
+    block-size: 0; /* Or also:  height:0; */
   }
-  
+
   &[open]::details-content {
-    block-size: auto;  /* Or also:  height:auto; */
+    block-size: auto; /* Or also:  height:auto; */
   }
 }
 .tool-invocation {
-    background-color:var(--tool-invocation-bg-color);
+  background-color: var(--tool-invocation-bg-color);
 }

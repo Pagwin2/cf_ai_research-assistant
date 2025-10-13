@@ -1,5 +1,7 @@
 # Chat 1
+
 ## Prompt(s)
+
 "What would be a good project that meets the following criteria? Optional Assignment Instructions: We plan to fast track review of candidates who complete an assignment to build a type of AI-powered application on Cloudflare. An AI-powered application should include the following components: LLM (recommend using Llama 3.3 on Workers AI), or an external LLM of your choice Workflow / coordination (recommend using Workflows, Workers or Durable Objects) User input via chat or voice (recommend using Pages or Realtime) Memory or state"
 
 ## Chat Link(s)
@@ -11,6 +13,7 @@ ChatGPT: https://chatgpt.com/share/68e420c6-2fe4-8002-bcbb-9b40695a5ba7
 Used to decide the overall idea of what to do for this project, follow up chat was used to clarify if Cloudflare had a search API or if something else would need to be used
 
 # Chat 2
+
 ## Prompt(s)
 
 "which search engine api would be the best to use for a research assistant AI tool?"
@@ -30,6 +33,7 @@ Reading over the initial response I went with Brave's API, it said Brave's API w
 Claude's code had more type definitions than I needed and overall overengineered the code for what I'm doing with it.
 
 # Chat 3
+
 ## Prompt(s)
 
 "I have some code which uses vercel's AI sdk ... However when the LLM tries to make multiple tool calls it seems to be interpreted as a chat message instead of multiple tool calls, any ideas on why?"
@@ -101,7 +105,7 @@ onStepFinish output:
 
 ...
 
-with the visible response being a call to the search internet tool and then sending 
+with the visible response being a call to the search internet tool and then sending
 
 ...
 
@@ -149,7 +153,6 @@ None I just swapped in a model with a higher rate limit, I returned to this conv
 "I have a system prompt for a research assistant which uses GPT-4.1-mini under the hood
 
 ...
-
 
 but I'm not always getting back content within summary tag(s), any ideas on what I could do to fix that?"
 

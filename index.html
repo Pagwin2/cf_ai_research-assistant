@@ -1,25 +1,26 @@
 <!doctype html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description"
-        content="AI-powered research assistnat built with assistance of cloudflare workers and secret store" />
+    <meta
+      name="description"
+      content="AI-powered research assistnat built with assistance of cloudflare workers and secret store"
+    />
     <meta name="theme-color" content="#000000" />
 
     <title>AI Research Assistant</title>
 
     <script blocking="render">
-        // not redoing this code because I doubt anyone will care but
-        // this light dark theme toggle can be so much better
-        // https://pagwin.xyz/posts/platonically-ideal-light-dark-toggle/
-        document.documentElement.classList.toggle(
-            "dark",
-            localStorage.theme === "dark" ||
-            (!("theme" in localStorage) &&
-                window.matchMedia("(prefers-color-scheme: dark)").matches)
-        );
+      // not redoing this code because I doubt anyone will care but
+      // this light dark theme toggle can be so much better
+      // https://pagwin.xyz/posts/platonically-ideal-light-dark-toggle/
+      document.documentElement.classList.toggle(
+        "dark",
+        localStorage.theme === "dark" ||
+          (!("theme" in localStorage) &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches)
+      );
     </script>
 
     <!-- Favicon support -->
@@ -31,22 +32,21 @@
 
     <!-- Prevent flash of unstyled content -->
     <style>
+      html {
+        background: var(--background);
+      }
+
+      @media (prefers-color-scheme: dark) {
         html {
-            background: var(--background);
+          background: var(--background);
         }
-
-        @media (prefers-color-scheme: dark) {
-            html {
-                background: var(--background);
-            }
-        }
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="app"></div>
     <script type="module" src="/src/client.tsx"></script>
-</body>
-
+  </body>
 </html>
