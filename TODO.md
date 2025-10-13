@@ -9,11 +9,11 @@
         - https://ai-sdk.dev/docs/reference/ai-sdk-core/stream-text#streamtext
         - https://ai-sdk.dev/docs/reference/ai-sdk-core/model-message#modelmessage
         - https://ai-sdk.dev/docs/reference/ai-sdk-ui/use-chat#usechat
-    - [ ] Change UI to match the change from chat to research
+    - [x] Change UI to match the change from chat to research
         - [x] Change descriptive text around text input at Marker 3 in app.tsx
         - [x] replace the function used in the map at marker 4 with one which does a switch statement on `m.role` or whatever it gets renamed to to change how things are displayed rather than doing a billion checks
             - https://ai-sdk.dev/docs/reference/ai-sdk-core/ui-message
-        - [ ] parse bot response into report and summary sections in BotMessage component at marker 5
+        - [x] parse bot response into report and summary sections in BotMessage component at marker 5
 - [ ] add code to either rate limit this to OpenAI or pass on the fact that a rate limit was hit to the user
 - [ ] Write up a readme for this
     - [ ] add cloudflare dev link thing to README

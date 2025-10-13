@@ -9,6 +9,26 @@ import { useAgentChat } from "agents/ai-react";
 import { useAgent } from "agents/react";
 import { todo } from "node:test";
 
+
+// not really parsing properly but for this use case that doesn't matter due to lack of nesting
+function pseudoXMLParse(tag: string, content: string): string {
+    let return_val = "";
+
+    // the loop will be redundant for most LLM output
+    for (let next_start = content.indexOf(`<${tag}>`), next_end = -2; next_start != -1; next_start = content.indexOf(`<${tag}>`, next_end)) {
+        next_end = content.indexOf(`</${tag}>`, next_start)
+        if (next_end == -1) {
+            return_val += content.substring(next_start + tag.length + 2);
+            break;
+        }
+        else {
+            return_val += content.substring(next_start + tag.length + 2, next_end);
+        }
+    }
+
+    return return_val;
+}
+
 export function BotMessage({ msg, showAvatar }: { msg: UIMessage, showAvatar: boolean }) {
     const isUser = false;
     const agent = useAgent({ agent: "chat" })
@@ -26,97 +46,53 @@ export function BotMessage({ msg, showAvatar }: { msg: UIMessage, showAvatar: bo
     const textResponse = msg.parts
         ?.filter(p => p.type === "text")
         .map(p => p.text).join("");
-    // Marker 5
-    const report = todo("parse out report xml tag(s)");
-    const summary = todo("parse out summary xml tags");
+    const toolUseInfo = msg.parts
+        ?.filter(isToolUIPart)
+        .map((part, i) => {
+            const toolCallId = part.toolCallId;
+            const toolName = part.type.replace("tool-", "");
+            return (
+                <ToolInvocationCard
+                    // biome-ignore lint/suspicious/noArrayIndexKey: using index is safe here as the array is static
+                    key={`${toolCallId}-${i}`}
+                    toolUIPart={part}
+                    toolCallId={toolCallId}
+                    needsConfirmation={false}
+                    onSubmit={({ toolCallId, result }) => {
+                        addToolResult({
+                            tool: part.type.replace("tool-", ""),
+                            toolCallId,
+                            output: result
+                        });
+                    }}
+                    addToolResult={(toolCallId, result) => {
+                        addToolResult({
+                            tool: part.type.replace("tool-", ""),
+                            toolCallId,
+                            output: result
+                        });
+                    }}
+                    addedClass="tool-invocation"
+                />
+            );
+        });
 
+    // Marker 5
+    const report = pseudoXMLParse("report", textResponse);
+    const summary = pseudoXMLParse("summary", textResponse);
     return (
         <chat-msg>
             <div
                 className={`flex justify-start`}
             >
                 <div
-                    className={`flex gap-2 max-w-[85%] flex-row`}
+                    className={`flex gap-2 max-w-[85%] flex-column`}
                 >
                     <Avatar username={"AI"} />
+                    {toolUseInfo.length != 0 ? <details className="tool-use p-3 bot-msg w-full text-neutral-100 text-base"><summary>Tool Usage</summary> {toolUseInfo} </details> : null}
+                    {report !== "" ? <details className="report p-3 bot-msg w-full text-neutral-100 text-base"><summary>Full Report</summary><MemoizedMarkdown content={report} id={msg.id} /></details> : null}
+                    {summary !== "" ? <section className="summary p-3 bot-msg w-full text-neutral-100 text-base"><h3 className="summary-header">Summary</h3>{summary}</section> : null}
 
-                    <div>
-                        <div>
-                            {msg.parts?.map((part, i) => {
-                                if (part.type === "text") {
-                                    return (
-                                        // biome-ignore lint/suspicious/noArrayIndexKey: immutable index
-                                        <div key={i}>
-                                            <Card
-                                                className={`p-3 rounded-md bg-neutral-100 dark:bg-neutral-900 ${isUser
-                                                    ? "rounded-br-none"
-                                                    : "rounded-bl-none border-assistant-border"
-                                                    } ${part.text.startsWith("scheduled message")
-                                                        ? "border-accent/50"
-                                                        : ""
-                                                    } relative`}
-                                            >
-                                                {part.text.startsWith(
-                                                    "scheduled message"
-                                                ) && (
-                                                        <span className="absolute -top-3 -left-2 text-base">
-                                                            🕒
-                                                        </span>
-                                                    )}
-                                                <MemoizedMarkdown
-                                                    id={`${msg.id}-${i}`}
-                                                    content={part.text.replace(
-                                                        /^scheduled message: /,
-                                                        ""
-                                                    )}
-                                                />
-                                            </Card>
-                                            <p
-                                                className={`text-xs text-muted-foreground mt-1 ${isUser ? "text-right" : "text-left"
-                                                    }`}
-                                            >
-                                                {formatTime(
-                                                    msg.metadata?.createdAt
-                                                        ? new Date(m.metadata.createdAt)
-                                                        : new Date()
-                                                )}
-                                            </p>
-                                        </div>
-                                    );
-                                }
-
-                                if (isToolUIPart(part)) {
-                                    const toolCallId = part.toolCallId;
-                                    const toolName = part.type.replace("tool-", "");
-
-                                    return (
-                                        <ToolInvocationCard
-                                            // biome-ignore lint/suspicious/noArrayIndexKey: using index is safe here as the array is static
-                                            key={`${toolCallId}-${i}`}
-                                            toolUIPart={part}
-                                            toolCallId={toolCallId}
-                                            needsConfirmation={false}
-                                            onSubmit={({ toolCallId, result }) => {
-                                                addToolResult({
-                                                    tool: part.type.replace("tool-", ""),
-                                                    toolCallId,
-                                                    output: result
-                                                });
-                                            }}
-                                            addToolResult={(toolCallId, result) => {
-                                                addToolResult({
-                                                    tool: part.type.replace("tool-", ""),
-                                                    toolCallId,
-                                                    output: result
-                                                });
-                                            }}
-                                        />
-                                    );
-                                }
-                                return null;
-                            })}
-                        </div>
-                    </div>
                 </div>
             </div>
         </chat-msg>

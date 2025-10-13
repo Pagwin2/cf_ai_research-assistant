@@ -310,3 +310,61 @@
     transform: rotate(360deg) scale(0.9);
   }
 }
+
+
+/*TODO: I'm never coming back to this but if I did I'd add css animations to these popping into existence*/
+.report {
+   background-color: oklch(0.205 0.0631 145.55);
+
+   &::details-content {
+    background-color: oklch(0.270 0.0973 145.55);
+    padding: 1em;
+   }
+
+   /*Credit to https://stackoverflow.com/a/79142029*/
+
+  interpolate-size: allow-keywords;
+  
+  &::details-content {
+    transition:
+      block-size 0.5s,
+      content-visibility 0.5s allow-discrete;
+    overflow: hidden;
+    block-size: 0;     /* Or also:  height:0; */
+  }
+  
+  &[open]::details-content {
+    block-size: auto;  /* Or also:  height:auto; */
+  }
+}
+.summary {
+   background-color: oklch(0.205 0.0631 253.06);
+}
+.summary-header {
+    font-size:1rem;
+    font-weight: bold;
+    text-decoration: underline dashed oklch(0.5779 0.1784 253.06);
+}
+.bot-msg {
+    border-radius: 0 0 var(--radius-md) var(--radius-md);
+}
+.flex-column {
+    flex-direction: column;
+}
+.tool-use{
+  background-color:oklch(0.205 0.0631 24.3);
+  &::details-content {
+    transition:
+      block-size 0.5s,
+      content-visibility 0.5s allow-discrete;
+    overflow: hidden;
+    block-size: 0;     /* Or also:  height:0; */
+  }
+  
+  &[open]::details-content {
+    block-size: auto;  /* Or also:  height:auto; */
+  }
+}
+.tool-invocation {
+    background-color:#000;
+}
