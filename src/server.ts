@@ -1,6 +1,5 @@
 import { routeAgentRequest, type Schedule } from "agents";
 
-import { getSchedulePrompt } from "agents/schedule";
 import { createOpenAI } from "@ai-sdk/openai";
 import { AIChatAgent } from "agents/ai-chat-agent";
 import {
@@ -140,11 +139,6 @@ export default {
       return Response.json({
         success: true //hasOpenAIKey
       });
-    }
-    if (false /*!process.env.OPENAI_API_KEY*/) {
-      console.error(
-        "OPENAI_API_KEY is not set, don't forget to set it locally in .dev.vars, and use `wrangler secret bulk .dev.vars` to upload it to production"
-      );
     }
     return (
       // Route the request to our agent or return 404 if not found

@@ -1,13 +1,10 @@
 import { isToolUIPart } from "ai";
-import { type UIMessage } from "ai";
+import type { UIMessage } from "ai";
 import { Avatar } from "../avatar/Avatar";
-import { Card } from "../card/Card";
 import { ToolInvocationCard } from "../tool-invocation-card/ToolInvocationCard";
 import { MemoizedMarkdown } from "../memoized-markdown";
-import { formatTime } from "@/utils";
 import { useAgentChat } from "agents/ai-react";
 import { useAgent } from "agents/react";
-import { todo } from "node:test";
 
 // not really parsing properly but for this use case that doesn't matter due to lack of nesting
 function pseudoXMLParse(tag: string, content: string): string {
@@ -16,11 +13,11 @@ function pseudoXMLParse(tag: string, content: string): string {
   // the loop will be redundant for most LLM output
   for (
     let next_start = content.indexOf(`<${tag}>`), next_end = -2;
-    next_start != -1;
+    next_start !== -1;
     next_start = content.indexOf(`<${tag}>`, next_end)
   ) {
     next_end = content.indexOf(`</${tag}>`, next_start);
-    if (next_end == -1) {
+    if (next_end === -1) {
       return_val += content.substring(next_start + tag.length + 2);
       break;
     } else {
@@ -33,20 +30,19 @@ function pseudoXMLParse(tag: string, content: string): string {
 
 export function BotMessage({
   msg,
-  showAvatar
+  showAvatar = true
 }: {
   msg: UIMessage;
   showAvatar: boolean;
 }) {
-  const isUser = false;
   const agent = useAgent({ agent: "chat" });
   const {
-    messages: agentMessages,
-    addToolResult,
-    clearHistory,
-    status,
-    sendMessage,
-    stop
+    //messages: agentMessages,
+    addToolResult
+    //clearHistory,
+    //status,
+    //sendMessage,
+    //stop
   } = useAgentChat<unknown, UIMessage<{ createdAt: string }>>({
     agent
   });
@@ -67,14 +63,14 @@ export function BotMessage({
         needsConfirmation={false}
         onSubmit={({ toolCallId, result }) => {
           addToolResult({
-            tool: part.type.replace("tool-", ""),
+            tool: toolName,
             toolCallId,
             output: result
           });
         }}
         addToolResult={(toolCallId, result) => {
           addToolResult({
-            tool: part.type.replace("tool-", ""),
+            tool: toolName,
             toolCallId,
             output: result
           });
@@ -91,8 +87,8 @@ export function BotMessage({
     <chat-msg>
       <div className={`flex justify-start`}>
         <div className={`flex gap-2 max-w-[85%] flex-column`}>
-          <Avatar username={"AI"} />
-          {toolUseInfo.length != 0 ? (
+          {showAvatar ? <Avatar username={"AI"} /> : null}
+          {toolUseInfo.length !== 0 ? (
             <details className="tool-use p-3 bot-msg w-full dark:text-neutral-100 text-neutral-900 dark:bg-neutral-900 text-base">
               <summary>Tool Usage</summary> {toolUseInfo}{" "}
             </details>

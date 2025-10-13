@@ -9,11 +9,8 @@ import type { tools } from "./tools";
 // Component imports
 import { Button } from "@/components/button/Button";
 import { Card } from "@/components/card/Card";
-import { Avatar } from "@/components/avatar/Avatar";
 import { Toggle } from "@/components/toggle/Toggle";
 import { Textarea } from "@/components/textarea/Textarea";
-import { MemoizedMarkdown } from "@/components/memoized-markdown";
-import { ToolInvocationCard } from "@/components/tool-invocation-card/ToolInvocationCard";
 import { UserMessage } from "@/components/messages/UserMessage";
 import { BotMessage } from "@/components/messages/BotMessage";
 
@@ -105,7 +102,6 @@ export default function Chat() {
 
   const {
     messages: agentMessages,
-    addToolResult,
     clearHistory,
     status,
     sendMessage,

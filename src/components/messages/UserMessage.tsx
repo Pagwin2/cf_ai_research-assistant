@@ -1,12 +1,8 @@
-import { isToolUIPart } from "ai";
-import { type UIMessage } from "ai";
+import type { UIMessage } from "ai";
 import { Avatar } from "../avatar/Avatar";
 import { Card } from "../card/Card";
-import { ToolInvocationCard } from "../tool-invocation-card/ToolInvocationCard";
 import { MemoizedMarkdown } from "../memoized-markdown";
 import { formatTime } from "@/utils";
-import { useAgentChat } from "agents/ai-react";
-import { useAgent } from "agents/react";
 
 export function UserMessage({
   msg,
@@ -16,18 +12,6 @@ export function UserMessage({
   showAvatar: boolean;
 }) {
   const isUser = true;
-  const agent = useAgent({ agent: "chat" });
-  const {
-    messages: agentMessages,
-    addToolResult,
-    clearHistory,
-    status,
-    sendMessage,
-    stop
-  } = useAgentChat<unknown, UIMessage<{ createdAt: string }>>({
-    agent
-  });
-
   return (
     <chat-msg>
       <div className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
@@ -80,40 +64,11 @@ export function UserMessage({
                       >
                         {formatTime(
                           msg.metadata?.createdAt
-                            ? new Date(m.metadata.createdAt)
+                            ? new Date(msg.metadata.createdAt)
                             : new Date()
                         )}
                       </p>
                     </div>
-                  );
-                }
-
-                if (isToolUIPart(part)) {
-                  const toolCallId = part.toolCallId;
-                  const toolName = part.type.replace("tool-", "");
-
-                  return (
-                    <ToolInvocationCard
-                      // biome-ignore lint/suspicious/noArrayIndexKey: using index is safe here as the array is static
-                      key={`${toolCallId}-${i}`}
-                      toolUIPart={part}
-                      toolCallId={toolCallId}
-                      needsConfirmation={false}
-                      onSubmit={({ toolCallId, result }) => {
-                        addToolResult({
-                          tool: part.type.replace("tool-", ""),
-                          toolCallId,
-                          output: result
-                        });
-                      }}
-                      addToolResult={(toolCallId, result) => {
-                        addToolResult({
-                          tool: part.type.replace("tool-", ""),
-                          toolCallId,
-                          output: result
-                        });
-                      }}
-                    />
                   );
                 }
                 return null;

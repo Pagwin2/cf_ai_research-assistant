@@ -5,11 +5,7 @@
 import { tool, type ToolSet } from "ai";
 import { z } from "zod/v3";
 
-import type { Chat } from "./server";
-import { getCurrentAgent } from "agents";
-import { scheduleSchema } from "agents/schedule";
 import { env } from "cloudflare:workers";
-//import { assert } from "node:console";
 
 type BraveAPIResponse = { web: { results: { url: string }[] } };
 
@@ -72,10 +68,6 @@ export const tools = {
 } satisfies ToolSet;
 
 export const executions = {};
-
-function todo(msg: string = ""): any {
-  throw `TODO: ${msg}`;
-}
 
 function htmlToText(
   html: string,
@@ -147,8 +139,8 @@ function htmlToText(
   });
 
   // Decode numeric entities
-  text = text.replace(/&#(\d+);/g, (match, dec) => String.fromCharCode(dec));
-  text = text.replace(/&#x([0-9a-f]+);/gi, (match, hex) =>
+  text = text.replace(/&#(\d+);/g, (_match, dec) => String.fromCharCode(dec));
+  text = text.replace(/&#x([0-9a-f]+);/gi, (_match, hex) =>
     String.fromCharCode(parseInt(hex, 16))
   );
 
