@@ -126,13 +126,21 @@ Used Claude to attempt to find a better LLM within cloudflare's Worker AI API th
 
 "I don't need to rate limit clients to my app though, I need to rate limit the app to OpenAI due to 1 query immediately bumping up on the Tier 1 rate limit"
 
+"Do any of these solutions allow for not needing to rip out the AI sdk and redo that work myself?"
+
+"could the wrapper approach be used to display a message to the user when the rate limit is hit instead?"
+
+"looking at past logs it seems the openai adapter for ai sdk raises an error in some way, could we use that instead of using p-queue with a timeout?"
+
+"can we change the returned output instead of throwing an error?"
+
 ## Chat Link(s)
 
 Claude: https://claude.ai/share/bc80c458-7333-453d-bed6-bb877a7daf81
 
 ## Use in Project
 
-None I just swapped in a model with a higher rate limit
+None I just swapped in a model with a higher rate limit, I returned to this conversation later to explore passing on information about the rate limit being hit or other errors to the user but ultimately decided the effort wasn't worth it
 
 # Chat 7
 
